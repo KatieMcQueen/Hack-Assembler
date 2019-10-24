@@ -10,16 +10,16 @@ def toBin(x):
     padding = 16 - len(bn)
     return '0' * padding + bn
 
-
 script, file = argv
 
+#get the list of tokens
 lexed = lexer.main()
 
 lineNum = 0
 memory = 16
 
 for line in lexed:
-    #add debug lin number to c and a instructions
+    #add debug line number to c and a instructions
     if line[0] != 'L':
         line.append(lineNum)
         lineNum += 1
@@ -35,11 +35,13 @@ for line in lexed:
 with open(file[:-4] + '.hack', 'w') as f:
     for line in lexed:
         if line[0] == 'A':
-            #if the comand is already numeric
+            #if the comand is already numeric translate
             if line[1]:
                 print(toBin(line[2]), file=f)
+            #if the symbol is in the table retrieve and translate it
             elif line[2] in table:
                 print(toBin(table[line[2]]), file=f)
+            #if the symbol is not in the table add it, translate it, and increment what memory to use
             else:
                 table[line[2]] = memory
                 print(toBin(memory), file=f)
